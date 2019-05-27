@@ -1,0 +1,232 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_017GV6PY43G4A3XNB6DP0znvz4e5T2mcnG4",
+    "name": "AWS-PVC",
+    "title": "AWS-PVC",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": null,
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "display_name": "AWS-PVC",
+      "favorite": false,
+      "target": {
+        "target_type": "aws.endpoint",
+        "target_id": "definition_target_017GV9RAG7T5P0tjETIl4fiC2Hzk9NOsmzm",
+        "execute_on_workflow_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_017GV79IOKWJB5p6JdJ76hlEcZLruSUFZTA",
+        "name": "Create VPC",
+        "title": "VPC",
+        "type": "aws.create_vpc",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "amazon_provided_ipv6_cidr_block": true,
+          "cidr_block": "172.16.0.0/16",
+          "continue_on_failure": false,
+          "display_name": "VPC",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_017GVFIF6C1OP0FtbSiSGCFVdIahiefQL1Z",
+        "name": "Create Internet Gateway",
+        "title": "Internet Gateway",
+        "type": "aws.create_internet_gateway",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Internet Gateway",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_017GVANITQ9D64Iat58XuaAULGRzmiZaMBr",
+        "name": "Create Subnet in a VPC",
+        "title": "public-1",
+        "type": "aws.create_subnet_vpc",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "availability_zone": "us-west-1b",
+          "cidr_block": "172.16.1.0/24",
+          "continue_on_failure": false,
+          "display_name": "public-1",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          },
+          "vpc_id": "$activity.definition_activity_017GV79IOKWJB5p6JdJ76hlEcZLruSUFZTA.output.vpc_id$"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_017GVE5WKC8J92SnhFwR0zqVYj1LrTnRZ2k",
+        "name": "Create Subnet in a VPC",
+        "title": "private-1",
+        "type": "aws.create_subnet_vpc",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "availability_zone": "us-west-1b",
+          "cidr_block": "172.16.10.0/24",
+          "continue_on_failure": false,
+          "display_name": "private-1",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          },
+          "vpc_id": "$activity.definition_activity_017GV79IOKWJB5p6JdJ76hlEcZLruSUFZTA.output.vpc_id$"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_017GVF9BTQ0NV6j6AdSdCzjvMNhNKo1OYHv",
+        "name": "Attach Internet Gateway",
+        "title": "Attach Internet Gateway",
+        "type": "aws.attach_internet_gateway",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Attach Internet Gateway",
+          "internet_gateway_id": "$activity.definition_activity_017GVFIF6C1OP0FtbSiSGCFVdIahiefQL1Z.output.internet_gateway_id$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          },
+          "vpc_id": "$activity.definition_activity_017GV79IOKWJB5p6JdJ76hlEcZLruSUFZTA.output.vpc_id$"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_017GVH60UIM2U4c8aOn00ThuTBqad2eHabq",
+        "name": "Create Route Table",
+        "title": "Create Route Table",
+        "type": "aws.create_route_table",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Create Route Table",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          },
+          "vpc_id": "$activity.definition_activity_017GV79IOKWJB5p6JdJ76hlEcZLruSUFZTA.output.vpc_id$"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_017GVI0EREZVX4g9tHyqUV2MFWrc8BFhfpK",
+        "name": "Create Route",
+        "title": "Create Route",
+        "type": "aws.create_route",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "destination_cidr_block": "0.0.0.0/0",
+          "display_name": "Create Route",
+          "gateway_id": "$activity.definition_activity_017GVFIF6C1OP0FtbSiSGCFVdIahiefQL1Z.output.internet_gateway_id$",
+          "route_table_id": "$activity.definition_activity_017GVH60UIM2U4c8aOn00ThuTBqad2eHabq.output.route_table_id$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_017GV9RAG7T5P0tjETIl4fiC2Hzk9NOsmzm": {
+      "unique_name": "definition_target_017GV9RAG7T5P0tjETIl4fiC2Hzk9NOsmzm",
+      "name": "AWS",
+      "title": "AWS",
+      "type": "aws.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_017GV8OIBYQYC01OCeyShaJQ1csgiu5JKnx",
+        "display_name": "AWS",
+        "region": "us-west-1"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_017GV8OIBYQYC01OCeyShaJQ1csgiu5JKnx": {
+      "unique_name": "definition_runtime_user_017GV8OIBYQYC01OCeyShaJQ1csgiu5JKnx",
+      "name": "AWS",
+      "title": "AWS",
+      "type": "runtime_user.aws_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "display_name": "AWS"
+      }
+    }
+  }
+}
